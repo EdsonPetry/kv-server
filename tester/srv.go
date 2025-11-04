@@ -1,7 +1,7 @@
+// Package tester provides comprehensive tests for the server groups, and clients
 package tester
 
 import (
-	//"log"
 	"sync"
 
 	"github.com/EdsonPetry/kv-server/labrpc"
@@ -20,7 +20,7 @@ func makeServer(net *labrpc.Network, gid Tgid, nsrv int) *Server {
 	srv := &Server{net: net}
 	srv.endNames = make([]string, nsrv)
 	srv.clntEnds = make([]*labrpc.ClientEnd, nsrv)
-	for j := 0; j < nsrv; j++ {
+	for j := range nsrv {
 		// a fresh set of ClientEnds.
 		srv.endNames[j] = Randstring(20)
 		// a fresh set of ClientEnds.
@@ -50,9 +50,9 @@ func (s *Server) startServer(gid Tgid) *Server {
 func (s *Server) connect(sg *ServerGrp, to []int) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	for j := 0; j < len(to); j++ {
+	for j := range len(to) {
 		if sg.IsConnected(to[j]) {
-			//log.Printf("connect %d to %d (%v)", s.id, to[j], s.endNames[to[j]])
+			// log.Printf("connect %d to %d (%v)", s.id, to[j], s.endNames[to[j]])
 			endname := s.endNames[to[j]]
 			s.net.Enable(endname, true)
 		}
@@ -66,7 +66,7 @@ func (s *Server) disconnect(from []int) {
 	if s.endNames == nil {
 		return
 	}
-	for j := 0; j < len(from); j++ {
+	for j := range len(from) {
 		endname := s.endNames[from[j]]
 		s.net.Enable(endname, false)
 	}
