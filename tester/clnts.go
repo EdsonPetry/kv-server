@@ -1,7 +1,7 @@
 package tester
 
 import (
-	//"log"
+	"slices"
 	"sync"
 
 	"github.com/EdsonPetry/kv-server/labrpc"
@@ -31,13 +31,8 @@ func makeClntTo(net *labrpc.Network, srvs []string) *Clnt {
 
 // caller must acquire lock
 func (clnt *Clnt) allowedL(server string) bool {
-	if clnt.srvs == nil {
+	if clnt.srvs == nil || slices.Contains(clnt.srvs, server) {
 		return true
-	}
-	for _, n := range clnt.srvs {
-		if n == server {
-			return true
-		}
 	}
 	return false
 }
