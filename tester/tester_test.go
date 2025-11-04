@@ -38,7 +38,7 @@ func makeTest(t *testing.T, nsrv int) *Test {
 	ts := &Test{t: t, sn: tester.ServerName(tester.GRP0, 0)}
 	cfg := tester.MakeConfig(t, nsrv, true, ts.startServer)
 	ts.Config = cfg
-	ts.clnt = ts.Config.MakeClient()
+	ts.clnt = ts.MakeClient()
 	return ts
 }
 

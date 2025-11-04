@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	models "github.com/EdsonPetry/kv-server/models1"
+	"github.com/EdsonPetry/kv-server/models"
 	"github.com/anishathalye/porcupine"
 )
 

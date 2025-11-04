@@ -33,11 +33,10 @@ type Config struct {
 }
 
 func MakeConfig(t *testing.T, n int, reliable bool, mks FstartServer) *Config {
-	ncpu_once.Do(func() {
+	ncpuOnce.Do(func() {
 		if runtime.NumCPU() < 2 {
 			fmt.Printf("warning: only one CPU, which may conceal locking bugs\n")
 		}
-		rand.Seed(makeSeed())
 	})
 	runtime.GOMAXPROCS(4)
 	cfg := &Config{}
@@ -92,12 +91,12 @@ func (cfg *Config) MakeGroupStart(gid Tgid, nsrv int, mks FstartServer) {
 
 func (cfg *Config) ExitGroup(gid Tgid) {
 	cfg.Group(gid).Shutdown()
-	cfg.Groups.delete(gid)
+	cfg.delete(gid)
 }
 
-var ncpu_once sync.Once
+var ncpuOnce sync.Once
 
-func (cfg *Config) RpcTotal() int {
+func (cfg *Config) RPCTotal() int {
 	return cfg.net.GetTotalCount()
 }
 
@@ -105,7 +104,7 @@ func (cfg *Config) BytesTotal() int64 {
 	return cfg.net.GetTotalBytes()
 }
 
-// start a Test.
+// Begin starts a Test.
 // print the Test message.
 // e.g. cfg.begin("Test (2B): RPC counts aren't too high")
 func (cfg *Config) Begin(description string) {
@@ -115,7 +114,7 @@ func (cfg *Config) Begin(description string) {
 	}
 	fmt.Printf("%s (%s network)...\n", description, rel)
 	cfg.t0 = time.Now()
-	cfg.rpcs0 = cfg.RpcTotal()
+	cfg.rpcs0 = cfg.RPCTotal()
 	atomic.StoreInt32(&cfg.ops, 0)
 }
 
@@ -123,16 +122,16 @@ func (cfg *Config) Op() {
 	atomic.AddInt32(&cfg.ops, 1)
 }
 
-// end a Test -- the fact that we got here means there
+// End ends a Test -- the fact that we got here means there
 // was no failure.
 // print the Passed message,
 // and some performance numbers.
 func (cfg *Config) End() {
 	cfg.CheckTimeout()
-	if cfg.t.Failed() == false {
+	if !cfg.t.Failed() {
 		t := time.Since(cfg.t0).Seconds()  // real time
 		npeers := cfg.Group(GRP0).N()      // number of Raft peers
-		nrpc := cfg.RpcTotal() - cfg.rpcs0 // number of RPC sends
+		nrpc := cfg.RPCTotal() - cfg.rpcs0 // number of RPC sends
 		ops := atomic.LoadInt32(&cfg.ops)  //  number of clerk get/put/append calls
 
 		fmt.Printf("  ... Passed --")
@@ -186,7 +185,7 @@ func makeSeed() int64 {
 }
 
 // Randomize server handles
-func random_handles(kvh []*labrpc.ClientEnd) []*labrpc.ClientEnd {
+func randomHandles(kvh []*labrpc.ClientEnd) []*labrpc.ClientEnd {
 	sa := make([]*labrpc.ClientEnd, len(kvh))
 	copy(sa, kvh)
 	for i := range sa {

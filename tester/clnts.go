@@ -15,6 +15,7 @@ type end struct {
 // Servers are named by ServerName() and clerks lazily make a
 // per-clerk ClientEnd to a server.  Each clerk has a Clnt with a map
 // of the allocated ends for this clerk.
+
 type Clnt struct {
 	mu   sync.Mutex
 	net  *labrpc.Network
@@ -140,7 +141,7 @@ func (clnts *Clnts) makeEnd(servername string) *labrpc.ClientEnd {
 	return end
 }
 
-// Create a clnt for a clerk with specific server names, but allow
+// MakeClient creates a clnt for a clerk with specific server names, but allow
 // only connections to connections to servers in to[].
 func (clnts *Clnts) MakeClient() *Clnt {
 	return clnts.MakeClientTo(nil)
