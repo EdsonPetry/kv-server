@@ -4,7 +4,7 @@ package kvsrv
 import (
 	"github.com/EdsonPetry/kv-server/kvtest"
 	"github.com/EdsonPetry/kv-server/rpc"
-	"github.com/EdsonPetry/kv-server/tester"
+	"6.5840/tester"
 )
 
 type Clerk struct {

@@ -4,9 +4,9 @@ import (
 	"log"
 	"sync"
 
-	"github.com/EdsonPetry/kv-server/labrpc"
+	"6.5840/labrpc"
 	"github.com/EdsonPetry/kv-server/rpc"
-	"github.com/EdsonPetry/kv-server/tester"
+	"6.5840/tester"
 )
 
 const Debug = false
@@ -19,9 +19,8 @@ func DPrintf(format string, a ...any) (n int, err error) {
 }
 
 type KVServer struct {
-	mu sync.Mutex
-
-	// Your definitions here.
+	mu  sync.Mutex
+	kvs map[string]int
 }
 
 func MakeKVServer() *KVServer {

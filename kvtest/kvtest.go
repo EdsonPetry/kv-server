@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/EdsonPetry/kv-server/rpc"
-	tester "github.com/EdsonPetry/kv-server/tester"
+	tester "6.5840/tester"
 )
 
 // ElectionTimeout generously allows solutions to complete elections in one second
@@ -65,7 +65,7 @@ func MakeTest(t *testing.T, cfg *tester.Config, randomkeys bool, mck IClerkMaker
 }
 
 func (ts *Test) Cleanup() {
-	ts.Config.End()
+	ts.End()
 	ts.Config.Cleanup()
 }
 
@@ -324,6 +324,7 @@ type entry struct {
 // many clients, the server's value for key "k" has the shape [(i, 1),
 // (i, 2), (j, 1), (j, 3)...]: that is, each client has entries with
 // increasing N, but may some Ns may have been skipped.
+
 func (ts *Test) OneClientAppend(me int, ck IKVClerk, done chan struct{}) ClntRes {
 	nmay := 0
 	nok := 0
@@ -358,6 +359,7 @@ type EntryN struct {
 
 // check reads the latest value for key "k" and checks that it has the
 // correct tuples.
+
 func (ts *Test) CheckAppends(es []EntryN, nclnt int, rs []ClntRes, ver rpc.Tversion) {
 	expect := make(map[int]int)
 	skipped := make(map[int]int)

@@ -4,7 +4,8 @@ import (
 	"testing"
 
 	"github.com/EdsonPetry/kv-server/kvtest"
-	"github.com/EdsonPetry/kv-server/tester"
+	"github.com/EdsonPetry/kv-server/models"
+	"6.5840/tester"
 )
 
 type TestKV struct {
@@ -14,6 +15,9 @@ type TestKV struct {
 }
 
 func MakeTestKV(t *testing.T, reliable bool) *TestKV {
+	// Set the visualization model for the tester framework
+	tester.SetVisualizationModel(models.KvModel)
+
 	cfg := tester.MakeConfig(t, 1, reliable, StartKVServer)
 	ts := &TestKV{
 		t:        t,
@@ -24,9 +28,9 @@ func MakeTestKV(t *testing.T, reliable bool) *TestKV {
 }
 
 func (ts *TestKV) MakeClerk() kvtest.IKVClerk {
-	clnt := ts.Config.MakeClient()
+	clnt := ts.MakeClient()
 	ck := MakeClerk(clnt, tester.ServerName(tester.GRP0, 0))
-	return &kvtest.TestClerk{ck, clnt}
+	return &kvtest.TestClerk{IKVClerk: ck, Clnt: clnt}
 }
 
 func (ts *TestKV) DeleteClerk(ck kvtest.IKVClerk) {
