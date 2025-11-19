@@ -109,12 +109,12 @@ func (ts *Test) CheckGet(ck IKVClerk, key, value string, version rpc.Tversion) {
 	if err != rpc.OK {
 		text := fmt.Sprintf("Get(%v) returns error = %v", key, err)
 		tester.AnnotateCheckerFailure(text, text)
-		ts.Fatalf(text)
+		ts.Fatalf("%s", text)
 	}
 	if val != value || ver != version {
 		text := fmt.Sprintf("Get(%v) returns (%v, %v) != (%v, %v)", key, val, ver, value, version)
 		tester.AnnotateCheckerFailure(text, text)
-		ts.Fatalf(text)
+		ts.Fatalf("%s", text)
 	}
 	text := fmt.Sprintf("Get(%v) returns (%v, %v) as expected", key, val, ver)
 	tester.AnnotateCheckerSuccess(text, "OK")
