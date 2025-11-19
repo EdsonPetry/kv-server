@@ -31,8 +31,8 @@ func RandValue(n int) string {
 }
 
 type IKVClerk interface {
-	Get(string) (string, rpc.Tversion, rpc.Err)
-	Put(string, string, rpc.Tversion) rpc.Err
+	Get(key string) (string, rpc.Tversion, rpc.Err)
+	Put(key string, value string, version rpc.Tversion) rpc.Err
 }
 
 type TestClerk struct {
