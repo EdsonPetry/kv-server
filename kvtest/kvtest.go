@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
+	tester "6.5840/tester1"
 	"github.com/EdsonPetry/kv-server/rpc"
-	tester "6.5840/tester"
 )
 
 // ElectionTimeout generously allows solutions to complete elections in one second

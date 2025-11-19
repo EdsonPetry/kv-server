@@ -2,9 +2,9 @@
 package kvsrv
 
 import (
+	tester "6.5840/tester1"
 	"github.com/EdsonPetry/kv-server/kvtest"
 	"github.com/EdsonPetry/kv-server/rpc"
-	"6.5840/tester"
 )
 
 type Clerk struct {
@@ -29,14 +29,28 @@ func MakeClerk(clnt *tester.Clnt, server string) kvtest.IKVClerk {
 // must match the declared types of the RPC handler function's
 // arguments. Additionally, reply must be passed as a pointer.
 func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
-	// You will have to modify this function.
-	return "", 0, rpc.ErrNoKey
+	args := rpc.GetArgs{Key: key}
+	reply := rpc.GetReply{}
+
+	for reply.Err != rpc.ErrNoKey {
+
+		ok := ck.clnt.Call(ck.server, "KVServer.Get", &args, &reply)
+		if !ok {
+			continue
+		}
+
+		if reply.Err == rpc.OK {
+			return reply.Value, reply.Version, reply.Err
+		}
+	}
+
+	return reply.Value, reply.Version, reply.Err
 }
 
 // Put updates key with value only if the version in the
 // request matches the version of the key at the server.  If the
 // versions numbers don't match, the server should return
-// ErrVersion.  If Put receives an ErrVersion on its first RPC, Put
+// ErrVersion. If Put receives an ErrVersion on its first RPC, Put
 // should return ErrVersion, since the Put was definitely not
 // performed at the server. If the server returns ErrVersion on a
 // resend RPC, then Put must return ErrMaybe to the application, since
@@ -51,6 +65,10 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 // must match the declared types of the RPC handler function's
 // arguments. Additionally, reply must be passed as a pointer.
 func (ck *Clerk) Put(key, value string, version rpc.Tversion) rpc.Err {
-	// You will have to modify this function.
-	return rpc.ErrNoKey
+	args := rpc.PutArgs{Key: key, Value: value, Version: version}
+	reply := rpc.PutReply{}
+
+	ck.clnt.Call(ck.server, "KVServer.Put", &args, &reply)
+
+	return reply.Err
 }

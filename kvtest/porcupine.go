@@ -9,9 +9,9 @@ import (
 
 	"github.com/anishathalye/porcupine"
 
+	tester "6.5840/tester1"
 	"github.com/EdsonPetry/kv-server/models"
 	"github.com/EdsonPetry/kv-server/rpc"
-	"6.5840/tester"
 )
 
 const linearizabilityCheckTimeout = 1 * time.Second
