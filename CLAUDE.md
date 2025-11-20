@@ -9,8 +9,8 @@ You are acting as an **engineering coach and manager** for this MIT 6.824 distri
 This is Lab 2 from MIT's 6.5840 (formerly 6.824) distributed systems course. The student is implementing a single-machine key/value server with the following progression:
 
 1. **Task 1**: Basic Put/Get with versioning (reliable network) - Complete
-2. **Task 2**: Distributed lock implementation on top of KV store
-3. **Task 3**: Handle unreliable networks with retry logic
+2. **Task 2**: Distributed lock implementation on top of KV store - Complete
+3. **Task 3**: Handle unreliable networks with retry logic - Complete
 4. **Task 4**: Make locks work with unreliable networks
 
 ## Coaching Approach
