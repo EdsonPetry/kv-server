@@ -43,6 +43,16 @@ func (lk *Lock) Acquire() {
 				continue // retry again
 			}
 
+			if err == rpc.ErrMaybe {
+				val, _, _ := lk.ck.Get(lk.name)
+				if val == lk.clientID {
+					return // created the lock
+				} else {
+					time.Sleep(10 * time.Millisecond)
+					continue // failed to create lock, retry
+				}
+			}
+
 			if err == rpc.OK {
 				return
 			}
@@ -55,6 +65,18 @@ func (lk *Lock) Acquire() {
 			if err == rpc.ErrVersion {
 				time.Sleep(10 * time.Millisecond)
 				continue // retry again
+			}
+
+			if err == rpc.ErrMaybe {
+
+				id, _, _ := lk.ck.Get(lk.name)
+				if id == lk.clientID {
+					return // success, we gotthe lock
+				} else {
+					time.Sleep(10 * time.Millisecond)
+					continue // didn't get lock, try again
+				}
+
 			}
 
 			// if claimed successfully, done
