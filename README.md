@@ -1,4 +1,4 @@
-# MIT 6.824 Key/Value Server Lab
+# Key/Value Server
 
 This project implements a single-machine key/value server with a
 distributed lock that works over an unreliable network. This is
